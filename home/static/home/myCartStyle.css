@@ -1,0 +1,13 @@
+#pic{
+    height: 100px;
+    width: 100px;
+    object-fit: contain;
+}
+
+.container{
+    margin-top: 10px;
+}
+
+#delete{
+    margin-left: 6px;
+}

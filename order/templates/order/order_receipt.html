@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    {% load static %}
+    <title>{{order.product.name}}_Receipt</title>
+
+    <!-- Bootstrap -->
+    <link href="{% static 'home/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    
+  </head>
+  <body>
+
+    <div style="font-size: 12px" style="text-align: left">
+        <h3 style="color: blue; font-family: poppins; font-size: 16px"> Tosky Brown Shop <b>(TBS)</b> </h3>
+
+        <h4> Receipt </h4>
+
+        <p>Post Office Box 266<br>
+           Kwadaso-Kumasi <br>
+           0554571609 / 0559334835 <br>
+           aduwares@gmail.com <br>
+           {{now}}
+        </p>
+
+    <div>
+
+    <h5 style="text-align: right"> www.aduwares.com </h5>
+
+    <hr>
+
+    <div class="container">
+        <div class="well table-responsive">
+            <table border="1" style="padding: 7px; margin-top: 50px; margin-bottom: 50px">
+                    <tr>
+                        <td> <b> Customer Name </b> </td> 
+                        <td> {{order.user.first_name}}  {{order.user.last_name}} </td> 
+                    </tr>
+
+                     <tr>
+                        <td> <b> Mobile Money Number </b> </td> 
+                        <td> {{order.momo}}</td> 
+                    </tr>
+
+                     <tr>
+                        <td> <b> Product Category </b> </td> 
+                        <td> {{order.product.category}} </td> 
+                    </tr>
+
+                    <tr>
+                        <td> <b> Product Name </b> </td> 
+                        <td> {{order.product.name}} </td> 
+                    </tr>
+
+                    <tr>
+                        <td> <b> Price </b> </td> 
+                        <td> GHs {{order.product.price}} </td> 
+                    </tr>
+
+                    <tr>
+                        <td> <b> Number of Items </b> </td> 
+                        <td> {{order.number_of_item}} </td> 
+                    </tr>
+
+                    <tr>
+                        <td> <b> Total Amount </b> </td> 
+                        <td> Gh {{order.total_amount}}0 </td> 
+                    </tr>
+
+                    <tr>
+                        <td> <b> Date Ordered </b> </td> 
+                        <td> {{order.date_orderd}} </td> 
+                    </tr>
+
+                    <tr>
+                        <td> <b> Date to be Delivered </b> </td> 
+                        <td> {{now.date}} </td> 
+                    </tr>
+            </table>
+        <div>
+    <div>
+
+    <hr>
+    
+    <span style="float: right"> {% url 'order:order_receipt' order.id %} <span>
+
+    
+     
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="{% static 'home/jquery.min.js' %}"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{% static 'home/bootstrap/js/bootstrap.min.js' %}"></script>
+  </body>
+</html>

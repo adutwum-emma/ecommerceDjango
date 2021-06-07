@@ -1,0 +1,108 @@
+{% extends "home/base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title></title>
+
+    {% load static %}
+
+    <!-- Bootstrap -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'home/order_historyStyle.css' %}" rel="stylesheet">
+
+    
+  </head>
+  <body>
+    
+    {% block content %}
+    <div class="container" id="theTable">
+
+        <div class="well table-responsive">
+            <div>
+                <b>Your orders</b>
+            </div>
+
+            <hr>
+
+            <table class="table table-striped">
+                <thead class="thead-light">
+                <tr>
+                    <th>#</th>
+                    <th>Name of product</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Number of orders</th>
+                    <th>Total Amount</th>
+                    <th>Date Ordered</th>
+                    <th>Delivered</th>
+                    <th>Preview</th>
+                    <th>Receipt</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for data in user.order_set.all %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{data.product.name}}</td>
+                    <td> GHs {{data.product.price}}0</td>
+                    <td>{{data.product.category}}</td>
+                    <td>{{data.number_of_item}}</td>
+                    <td> GHs {{data.total_amount}}0</td>
+                    <td>{{data.date_orderd}}</td>
+                    {% if data.is_delivered %}
+                    <td> <span class="glyphicon glyphicon-ok"> Yes </span> </td>
+                    {% else %}
+                    <td><span class="glyphicon glyphicon-export"> No </span>  </td>
+                    {% endif %}
+                    <td><a href="#" data-toggle="modal" data-target="#history-{{forloop.counter}}"> <span class="glyphicon glyphicon-eye-open"></span> View</a></td>
+                    <td><a href="{% url 'order:order_receipt' data.id %}" target="_blank" class="btn-xs btn-info"> <span class="glyphicon glyphicon-print"></span> Print</a></td>
+                </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+
+    {% for data in user.order_set.all %}
+    <div class="container">
+        <div class="modal fade" id="history-{{forloop.counter}}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <b>PS4</b>
+                    </div>
+                    <div class="container" id="toMargin">
+                        <div class="col-md-2 col-xs-6">
+                            <div class="thumbnail">
+                                <img class="img-responsive" src="{{data.product.photo.url}}" alt="ps4">
+    
+                                <div class="caption">
+                                    <b>{{data.product.price}}</b> - {{data.date_orderd}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"> <span class="glyphicon glyphicon-remove"></span> Cancel </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% endblock %}
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</html>

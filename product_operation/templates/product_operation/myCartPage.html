@@ -1,0 +1,129 @@
+{% extends "home/base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>{% block title %} {{user.username}}'s Carts {% endblock %}</title>
+    {% load static %}
+    <!-- Bootstrap -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'home/myCartStyle.css' %}" rel="stylesheet">
+  </head>
+  <body>
+    
+    {% block content %}
+
+    
+    <div class="container" style="background-color: #f8f8f8; padding: 20px; border-radius: 5px; box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.1)">
+
+        <h4 style="opacity: 0.5"> Your carts </h4>
+        <hr>
+
+        <div class="row">
+
+        {% if user.is_authenticated %}
+
+        {% if user.id == user_obj.id %}
+
+        {% for data in user_obj.cart_set.all %}
+
+            <div class="col-md-2 col-xs-6">
+                <div class="thumbnail">
+
+                    <div class="thumbnail-title">
+                        <a href="{% url 'order:order_page' data.product.id %}"> <b> {{data.product.name}} </b> </a> 
+                    </div>
+                    
+                    <a href="{% url 'order:order_page' data.product.id %}"> <img class="img-responsive" src="{{data.product.photo.url}}" alt="phone" id="pic"> </a>
+
+                    <div class="caption">
+                        Ghs {{data.product.price}}0
+
+                        <div class="btn-group" role="group">
+
+                            <form action="{% url 'product_operation:delete_cart' %}" method="post" id="delete" onsubmit="return confirm('Are you sure want to remove?')">
+                                {% csrf_token %}
+                                <input type="hidden" value="{{data.id}}" name="cart_id">
+                                <input type="hidden" value="{{user.id}}" name="user_id">
+                                <a href="" class="btn btn-default" data-toggle="modal" data-target="#modal-{{forloop.counter}}">Preview</a>
+                                <button type="submit" class="btn btn-default"> <span class="glyphicon glyphicon-trash"></span> </button>
+                            </form>
+
+                        </div>
+                        
+                    </div>
+
+                </div>
+            </div>
+
+            {% endfor %}
+
+            {% else %}
+                <h4 style="text-align: center" class="lead"> You can't access this page</h4>
+                <div style="text-align: center"> 
+                    <a href="{% url 'product_operation:my_carts' user.id %}"><button class="btn btn-primary">Continue</button> </a>
+                </div>
+            {% endif %}
+
+            {% else %}
+                <h4 style="text-align: center" class="lead"> You can't access this page <small style="text-align:center"> You need to login </small> </h4>
+            {% endif %}
+
+        </div>
+    </div>
+
+    {% for data in user_obj.cart_set.all %}
+    <div class="container">
+        <div class="modal fade" id="modal-{{forloop.counter}}">
+            <div class="modal-dialog">
+    
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <b> {{data.product.name}} - <span style="color: blue">{{data.product.category}} </span></b>
+                    </div>
+
+                    <div class="modal-body">
+                        <p>{{data.product.description}}</p>
+                        
+                        
+                            <div class="thumbnail">
+                                <img  src="{{data.product.photo.url}}" alt="ps4" width="200">
+            
+                                <div class="caption">
+            
+                                    Ghs {{data.product.price}} <del>{{data.product.old_price}}</del> <br>
+                                    <b>You added this on:</b> {{data.date_added}}
+
+                                    <a href="{% url 'order:order_page' data.product.id %}" class="btn btn-primary">Order</a>
+                                    
+                                </div>
+
+                            </div>  
+            
+
+                    </div>
+    
+                    <div class="modal-footer">
+                        <button class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+    
+                </div>
+    
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    
+    {% endblock %}
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,147 @@
+{% extends "home/base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>{% block title %} TB's Shop - Seacrh results{% endblock %}</title>
+
+    {% load static %}
+
+    <!-- Bootstrap -->
+    <link href="{% static 'home/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'home/stylesheet.css' %}" rel="stylesheet">
+
+    
+  </head>
+  <body>
+    
+
+{% block content %}
+
+    <div class="container-fluid" style="margin-top: 10px">
+
+        <div class="row">
+
+    {% if product %}
+        {% for data in product %}
+
+            <div class="col-md-2 col-xs-7">
+                <div class="thumbnail">
+                    <div class="thumbnail-title">{{data.name}} - {{data.category}}</div>
+                    <img id="myImage" class="img-responsive" src="{{data.photo.url}}" alt="ps4">
+
+                    <div class="caption">
+
+                        {% if data.old_price %}
+
+                            GHs {{data.price}}0 <del>{{data.old_price}}0
+
+                        {% else %}
+
+                            GHs {{data.price}}0
+
+                        {% endif %}
+
+                        <div class="btn-group">
+                            <form action="{% url 'product_operation:add_to_cart' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="product_id" value="{{data.id}}">
+                                <input type="hidden" name="user_id" value="{{user.id}}">
+                                <a href="" class="btn btn-default" data-toggle="modal" data-target="#modal-{{forloop.counter}}">View</a>
+                                {% if user.is_authenticated %}
+                                <a href="{% url 'order:order_page' data.id %}" class="btn btn-primary">Order</a>
+                                {% else %}
+                                {% endif %}
+                                <button class="btn btn-warning" type="submit" onclick="return confirm('Confirm to add cart')"> <span class="glyphicon glyphicon-shopping-cart"></span> </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>  
+
+            </div>
+
+            {% endfor %}
+
+            {% else %}
+                <div>
+                    <p style="text-align: center; font-size: 18px"> No search results found for <b> {{search_key}} </b>
+                    <span class="glyphicon glyphicon-warning-sign label-control-feedback"></span>
+                    </p>
+                </div>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    
+
+    {% for new in product %}
+    <div class="container">
+        <div class="modal fade" id="modal-{{forloop.counter}}">
+            <div class="modal-dialog">
+    
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <b> {{new.name}} </b>
+                    </div>
+
+                    <div class="modal-body">
+                        <p>{{new.description}}</p>
+                        
+                        
+                            <div class="thumbnail">
+                                <img  src="{{new.photo.url}}" alt="ps4" width="200">
+            
+                                <div class="caption">
+            
+                                    {% if new.old_price %}
+
+                                        GHs {{new.price}}0 <del>{{new.old_price}}0
+
+                                    {% else %}
+
+                                        GHs {{new.price}}0
+
+                                    {% endif %}
+            
+                                    <div class="btn-group">
+                                        <form action="{% url 'product_operation:add_to_cart' %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="product_id" value="{{new.id}}">
+                                            <input type="hidden" name="user_id" value="{{user.id}}">
+                                            <a href="{% url 'order:order_page' new.id %}" class="btn btn-primary">Order</a>
+                                            <button class="btn btn-warning" type="submit" onclick="return confirm('Confirm to add cart')" > <span class="glyphicon glyphicon-shopping-cart"></span></button>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>  
+            
+
+                    </div>
+    
+                    <div class="modal-footer">
+                        <button class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+    
+                </div>
+    
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% endblock %}
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="home/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="home/js/bootstrap.min.js"></script>
+
+  </body>
+</html>

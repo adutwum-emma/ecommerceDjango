@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    {% load static %}
+    <title>{% block title %}  {% endblock %}</title>
+
+    <!-- Bootstrap -->
+    <link href="{% static 'home/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'home/baseStyle.css' %}" rel="stylesheet">
+    <link href="{% static 'home/stylesheet.css' %}" rel="stylesheet">
+    <link href="{% static 'home/myCartStyle.css' %}" rel="stylesheet">
+    <link href="{% static 'home/orderpageStyle.css' %}" rel="stylesheet">
+    <link href="{% static 'home/order_historyStyle.css' %}" rel="stylesheet">
+
+    
+  </head>
+  <body>
+    
+
+    <nav class="nav navbar-inverse">
+
+        <div class="container-fluid">
+
+            <div class="navbar-header">
+
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navCollapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <a href="/" class="navbar-brand"> <span class="glyphicon glyphicon-tent"></span> TBS</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navCollapse">
+            <ul class="nav navbar-nav">
+                <li class="active" ><a href="/"> <span class="glyphicon glyphicon-home"></span> Home</a></li>
+                <li><a href="{% url 'product_categories:categories' %}">Categories</a></li>
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'product_operation:my_carts' user.id %}"> <span class="glyphicon glyphicon-shopping-cart"></span> Carts</a></li>
+                <li><a href="{% url 'order:order_history' user.id %}"> <span class="glyphicon glyphicon-time"></span> Order-History</a></li>
+                <li><a href="#" data-target="#contact" data-toggle="modal"> <span class="glyphicon glyphicon-envelope"></span> Contact</a></li>
+                {% else %}
+
+                {% endif %}
+            </ul>
+
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'home:profile' user.id %}"> <span class="glyphicon glyphicon-user"></span> {{user.username}}</a></li>
+                    <li><a href="{% url 'account:logout' %}" onclick="return confirm('Are you sure you want to logout?')"> <span class="glyphicon glyphicon-off"></span> Logout</a></li>
+                {% else %}
+                <li><a href="#signup" data-toggle="modal" data-target="#signup"> <span class="glyphicon glyphicon-user"></span> Register</a></li>
+                <li><a href="#" data-toggle="modal" data-target="#login-modal"> <span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                {% endif %}
+            </ul>
+
+            <form action="{% url 'search:product_search' %}" method="GET" class="navbar-form navbar-right">
+                <div class="form-group">
+                    <input type="search" class="form-control" placeholder="search..." name="search" value="{{search_key}}">
+                </div>
+                <button type="submit" class="btn btn-danger"> <span class="glyphicon glyphicon-search"></span> </button>
+            </form>
+        </div>
+
+        </div>
+            
+
+    </nav>
+
+    <div class="conatiner">
+        <div class="modal fade" id="login-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                         <b> Login... </b> 
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-inline" action="{% url 'account:login' %}" method="post">
+                            {% csrf_token %}
+
+                            <input type="hidden" name="user_id" value="{{user.id}}">
+
+                            <div class="form-group has-feedback">
+                                <input type="text" placeholder="Username" class="form-control" name="username" required>
+                                <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                            </div>
+
+                            <div class="form-group has-feedback">
+                                <input type="password" placeholder="Password" class="form-control" name="password" required>
+                                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">LogIn</button>
+                        </form>
+
+                        <br>
+
+                        <div>
+                            <a href="" class="link link-danger">Forgot password?</a>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"> <span class="glyphicon glyphicon-remove-sign"></span> Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="modal fade" id="signup">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <b> SignUp here... </b>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <form class="form" action="{% url 'account:sign_up' %}" method="post">
+                            {% csrf_token %}
+                            <div class="form-group has-feedback">
+                                <input type="text" placeholder="Username" class="form-control" name="username" required>
+                                <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                            </div>
+
+                            <div class="form-group has-feedback">
+                                <input type="text" placeholder="First Name" class="form-control" name="first_name" required>
+                                <span class="glyphicon glyphicon-pencil form-control-feedback"></span>
+                            </div>
+
+                            <div class="form-group has-feedback">
+                                <input type="text" placeholder="Last Name" class="form-control" name="last_name" required>
+                                <span class="glyphicon glyphicon-pencil form-control-feedback"></span>
+                            </div>
+
+                            <div class="form-group has-feedback">
+                                <input type="email" placeholder="Email" class="form-control" name="email" required>
+                                <span class="glyphicon glyphicon-inbox form-control-feedback"></span>
+                            </div>
+
+                            <div class="form-group has-feedback">
+                                <input type="password" placeholder="Password" class="form-control" name="password">
+                                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                            </div>
+
+                            <div class="form-group has-feedback">
+                                <input type="password" placeholder="Confirm Password" class="form-control" name="con_password">
+                                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                            </div>
+
+                            <input type="submit" class="btn btn-success" value="SignUp">
+                        </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove-sign"></span> Cancel </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="modal fade" id="contact">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        Contact us...
+                    </div>
+
+                    <div class="modal-body">
+                        <form class="form" action="{% url 'home:contact' %}" method="post">
+
+                            {% csrf_token%}
+                            <input type="hidden" name="user_name" value="{{user.username}}">
+                            <input type="hidden" name="user_email" value="{{user.email}}">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="subject" placeholder="Subject">
+                            </div>
+                            
+                            <textarea class="form-control" rows="3" name="message" id="textLock" draggable="false"></textarea> <br>
+
+                        <div>
+                            <input type="submit" value="Send" class="btn btn-primary">
+                        </div>
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"> <span class="glyphicon glyphicon-remove-sign"></span> Cancel </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block content %}
+    
+    {% endblock %}
+
+    {% for message in messages %}
+        <script> alert("{{message}}") </script>
+    {% endfor %}
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="{% static 'home/jquery.min.js' %}"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{% static 'home/bootstrap/js/bootstrap.min.js' %}"></script>
+  </body>
+</html>

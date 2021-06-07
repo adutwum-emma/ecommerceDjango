@@ -1,0 +1,9 @@
+#myImage{
+    height: 100px;
+    width: 100px;
+    object-fit: contain;
+}
+
+.btn-group{
+    justify-content: space-around;
+}

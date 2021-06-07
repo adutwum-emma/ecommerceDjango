@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    {% load static %}
+    <title>{% block title %}  {% endblock %}</title>
+
+    <!-- Bootstrap -->
+    <link href="{% static 'home/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'home/baseStyle.css' %}" rel="stylesheet">
+    <link href="{% static 'home/stylesheet.css' %}" rel="stylesheet">
+    <link href="{% static 'home/myCartStyle.css' %}" rel="stylesheet">
+    <link href="{% static 'home/orderpageStyle.css' %}" rel="stylesheet">
+    <link href="{% static 'home/order_historyStyle.css' %}" rel="stylesheet">
+
+    
+  </head>
+  <body>
+    
+    <div class="container">
+        <h2> TBS Order Receipt </h2> <small> {{now.date}} </small>
+        <h4> Hello, {{user.first_name}} {{user.last_name}} </h4>
+        <div class="well table-resposive">
+            <table class="table table-striped" border="1" style="padding: 10px">
+                <tr style="padding: 10px">
+                    <td> <b> Product Ordered </b> <td>
+                    <td> {{product.name}} <td>
+                </tr>
+
+                <tr style="padding: 10px">
+                    <td> <b> Product Category </b> <td>
+                    <td> {{product.category}} <td>
+                </tr>
+
+                <tr style="padding: 10px">
+                    <td> <b> Product Price </b> <td>
+                    <td>GHs {{product.price}}0 <td>
+                </tr>
+
+                <tr style="padding: 10px">
+                    <td> <b> Number of Items </b> <td>
+                    <td> {{items}} <td>
+                </tr>
+
+                <tr style="padding: 10px">
+                    <td> <b> Total Amount </b> <td>
+                    <td>GHs {{amount}}0 <td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <a href="{% url 'order:order_receipt' user.id %}" 
+    style="text-decoration: none; border-style: none; 
+    padding: 10px; background-color: light-blue; border-radius: 5px; margin: 10px">Visit Order History</a>
+   
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="{% static 'home/jquery.min.js' %}"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{% static 'home/bootstrap/js/bootstrap.min.js' %}"></script>
+  </body>
+</html>

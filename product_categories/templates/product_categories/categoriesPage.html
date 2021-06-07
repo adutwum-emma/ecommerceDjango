@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title></title>
+    {% load static %}
+    <!-- Bootstrap -->
+    <link href="{% static 'home/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'home/stylesheet.css' %}" rel="stylesheet">
+
+    
+  </head>
+  <body style="overflow-x: hidden;">
+    
+    <div class="jumbotron">
+        <div class="container">
+            <h3><a style="text-decoration: none; transition: 0.7s; opacity: 0.6;" href="/"><span class="glyphicon glyphicon-tent"></span> TBS</a></h3>
+            <h5>Tosky Brown Shop</h5>
+        </div>
+    </div>
+
+    <div class="container">
+        <ul class="nav nav-tab nav-pills">
+            {% for data in category %}
+                {% if forloop.counter == 1 %}
+                    <li data-toggle="tab" class="active" data-target="#pane{{data.id}}"> <a href="">{{data.name}}</a></li>
+                {% else %}
+                    <li data-toggle="tab" data-target="#pane{{data.id}}"> <a href="">{{data.name}}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+
+        <hr>
+
+        <div class="tab-content" style="margin-top: 20px;">
+            {% for data in category %}
+                {% if forloop.counter == 1 %}
+                <div class="tab-pane fade in active" id="pane{{data.id}}">
+                    <div class="container">
+                        <div class="row">
+                            {% for product in data.product_set.all %}
+                            <div class="col-md-2 col-xs-7">
+                                <div class="thumbnail">
+                                    <h6 class="thumbnail-title">{{product.name}} </h6> 
+                                    <div class="container">
+                                        <img class="img-responsive" src="{{product.photo.url}}" id="myImage">
+                                    </div>
+                                    <div class="caption">
+                                        {% if product.old_price %}
+                                            <small>Ghs {{product.price}}0 <del>{{product.old_price}}</del> </small>
+                                        {% else %}
+                                            <small>Ghs {{product.price}}0 </small>
+                                        {% endif %}
+                                        <form class="form-group" action="{% url 'product_operation:add_to_cart' %}" method="post" onsubmit="return confirm('Adding to your carts')">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="user_id" value="{{user.id}}">
+                                            <input type="hidden" name="product_id" value="{{product.id}}">
+                                            <a href="" class="btn btn-default" data-target="#modal-{{product.id}}" data-toggle="modal">View</a>
+                                            <button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-shopping-cart"></span></button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="tab-pane fade" id="pane{{data.id}}">
+                    <div class="container">
+                        <div class="row">
+                            {% for product in data.product_set.all %}
+                            <div class="col-md-2 col-xs-7">
+                                <div class="thumbnail">
+                                    <h6 class="thumbnail-title">{{product.name}} </h6> 
+                                    <div class="container">
+                                        <img class="img-responsive" src="{{product.photo.url}}" id="myImage">
+                                    </div>
+                                    <div class="caption">
+                                        {% if product.old_price %}
+                                            <small>Ghs {{product.price}}0 <del>{{product.old_price}}</del> </small>
+                                        {% else %}
+                                            <small>Ghs {{product.price}}0 </small>
+                                        {% endif %}
+                                        <form class="form-group" action="{% url 'product_operation:add_to_cart' %}" method="post" onsubmit="return confirm('Adding to your carts')">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="user_id" value="{{user.id}}">
+                                            <input type="hidden" name="product_id" value="{{product.id}}">
+                                            <a href="" class="btn btn-default" data-target="#modal-{{product.id}}" data-toggle="modal">View</a>
+                                            <button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-shopping-cart"></span></button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    {% for pro in my_pro %}
+    <div class="container">
+        <div class="modal fade" id="modal-{{pro.id}}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="thumbnail-title">{{pro.name}} - <small>{{pro.category.name}}</small></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="thumbnail">
+                            {{pro.description}}
+                            <img class="img-responsive" src="{{pro.photo.url}}" id="myImage">
+                            <div class="caption">
+                                {% if pro.old_price %}
+                                    <small>Ghs {{pro.price}}0 <del>Ghs {{pro.old_price}}0</del> </small>
+                                {% else %}
+                                    <small>Ghs {{pro.price}}0 </small>
+                                {% endif %}
+                                <form class="form-group" action="{% url 'product_operation:add_to_cart' %}" method="post">
+                                    {% csrf_token %}
+                                    <a href="{% url 'order:order_page' pro.id %}" class="btn btn-primary">Order</a>
+                                    <button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-shopping-cart"></span></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-danger" data-dismiss="modal"> <span class="glyphicon glyphicon-remove-sign"></span> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="{% static 'home/jquery.min.js' %}"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{% static 'home/bootstrap/js/bootstrap.min.js' %}"></script>
+  </body>
+</html>

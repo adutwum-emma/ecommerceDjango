@@ -1,0 +1,70 @@
+{% extends "home/base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>{% block title %} Order with ease {% endblock %} </title>
+    {% load static %}
+    <!-- Bootstrap -->
+    <link href="{% static 'home/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'home/orderpageStyle.css' %}" rel="stylesheet">
+
+    
+  </head>
+  <body>
+
+    {% block content %}
+    <div class="container" id="order-form">
+      <h3 class="lead" style="font-family: poppins;">ORDER FORM</h3>
+      <hr>
+        <form action="" method="post" onsubmit="return confirm('You are about to purchase the selected product')">
+
+          {% csrf_token %}
+
+            <input type="hidden" value="{{user.id}}" name="user_id">
+
+            <div class="form-group has-feedback">
+                <label for="product">Product Name</label> <br> 
+                <input type="text" value="{{product.name}}" id="product" class="form-control" readonly>
+                <span class="glyphicon glyphicon- form-control-feedback"></span>
+            </div>
+
+            <div class="form-group has-feedback">
+                <label for="product_price">Product Rate</label> <br> 
+                <input type="text" value="GHs {{product.price}}0" id="product_price" class="form-control" readonly>
+                <span class="glyphicon glyphicon- form-control-feedback"></span>
+            </div>
+ 
+            <div class="form-group has-feedback">
+                <label for="phone">Mobile money Number</label> <br> 
+                <input type="phone" placeholder="Mobile Money Number" class="form-control" name="phoneNumber" id="phone" required>
+                <span class="glyphicon glyphicon-phone form-control-feedback"></span>
+            </div>
+
+            <div class="form-group has-feedback">
+              <label for="address">Address</label> <br> 
+              <input type="text" placeholder="Adress" class="form-control" name="address" id="address" required>
+              <span class="glyphicon glyphicon-road form-control-feedback"></span>
+            </div>
+
+            <div class="form-group has-feedback">
+                <label for="number">Number of items</label> <br>
+                <input type="number" id="number" min="1" name="num_of_items" class="form-control" required>
+                <span class="glyphicon glyphicon-arrow-up form-control-feedback"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-center"> <span class="glyphicon glyphicon-credit-card"> </span> Order </button>
+        </form>
+    </div>
+    {% endblock %}
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</html>

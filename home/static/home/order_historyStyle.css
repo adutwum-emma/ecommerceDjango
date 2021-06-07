@@ -1,0 +1,13 @@
+#theTable{
+    margin-top: 5px;
+}
+
+#myImage{
+    height: 100px;
+    width: 100px;
+    object-fit: contain;
+}
+
+#toMargin{
+    margin-top: 10px;
+}
